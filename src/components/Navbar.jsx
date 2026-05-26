@@ -58,7 +58,7 @@ export default function Navbar() {
                 
                 {/* Logo Area */}
                 <div className="flex items-center gap-2 cursor-pointer">
-                    <span className="text-white font-bold text-xl tracking-wide">Programming Hero</span>
+                    <span className="text-white font-bold text-xl tracking-wide">Hire Loop</span>
                 </div>
             </div>
 
