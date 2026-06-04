@@ -1,9 +1,19 @@
 'use client';
 import { useState } from "react";
 import { Link, Button } from "@heroui/react";
+import Image from "next/image";
+import { signOut, useSession } from "@/lib/auth-client";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { data: session } = useSession();
+    console.log("Session in Navbar:", session);
+    const user = session?.user;
+
+    const handleSignOut = () => {
+        signOut()
+
+    }
 
     // ডেস্কটপ এবং মোবাইলের জন্য কমন মেইন লিংক
     const mainLinks = (
@@ -23,9 +33,22 @@ export default function Navbar() {
     // ডেস্কটপ এবং মোবাইলের জন্য কমন অ্যাকশন লিংক (Sign In / Get Started)
     const actionLinks = (
         <>
-            <li>
-                <Link href="#" className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-semibold px-2">Sign In</Link>
-            </li>
+           <>
+            {user ? (
+                <div className="flex items-center gap-4">
+                    <span className="text-gray-300 text-sm font-medium">Hello, {user.name || user.email}</span>
+                    <Button size="sm" className="bg-white text-black font-semibold rounded-xl px-4 py-2 hover:bg-gray-200 transition-all" onClick={handleSignOut}>
+                        Sign Out
+                    </Button>
+                </div>
+            ) : (
+                <li>
+                    <Link href="/auth/signin" className="text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-semibold px-2">
+                        Sign In
+                    </Link>
+                </li>
+            )}
+           </>
             <li>
                 <Link href="#">
                     <Button size="sm" className="bg-white text-black font-semibold rounded-xl px-4 py-2 hover:bg-gray-200 transition-all">
@@ -38,7 +61,7 @@ export default function Navbar() {
 
     return (
         <nav className="sticky top-0 z-40 w-full bg-[#121212] py-4 px-6 md:px-12 flex items-center justify-between">
-            
+
             {/* Left Side: Logo (No Background) */}
             <div className="flex items-center gap-4">
                 {/* Mobile Menu Button */}
@@ -55,10 +78,17 @@ export default function Navbar() {
                         )}
                     </svg>
                 </button>
-                
+
                 {/* Logo Area */}
-                <div className="flex items-center gap-2 cursor-pointer">
-                    <span className="text-white font-bold text-xl tracking-wide">Hire Loop</span>
+                <div className="flex items-center cursor-pointer">
+                    <Image
+                        src="/images/logo.png" // Extension-ti oboshshoi check kore niben (.png/.jpg)
+                        alt="Hire Loop Logo"
+                        width={160}  // Apnar pochondo mto width (pixel-e)
+                        height={50}  // Apnar pochondo mto height (pixel-e)
+                        className="object-contain"
+                        priority // Logo layout-e shobar age load hobar jonno
+                    />
                 </div>
             </div>
 
@@ -68,10 +98,10 @@ export default function Navbar() {
                 <ul className="flex items-center gap-6">
                     {mainLinks}
                 </ul>
-                
+
                 {/* Vertical Separator */}
                 <span className="h-5 w-[1px] bg-white/20"></span>
-                
+
                 {/* Auth Actions Links */}
                 <ul className="flex items-center gap-4">
                     {actionLinks}
