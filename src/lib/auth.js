@@ -13,4 +13,13 @@ export const auth = betterAuth({
     emailAndPassword: { 
     enabled: true, 
   }, 
+  user: {
+    additionalFields: {
+      accountType: {
+        type: "string",
+        defaultValue: "jobseeker",
+        required: true,
+      },
+    },
+  },
 });
